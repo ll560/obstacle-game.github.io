@@ -9,16 +9,25 @@
     <script src="//cdn.jsdelivr.net/npm/phaser@3.24.1/dist/phaser.min.js"></script>
 </head>
 <body >
-<!--onload="startPlaying()"-->
-    <script type="text/javascript" src="script.js"></script>
-    
+ <script> function myFunction(){
+    document.getElementById('game').style.display = 'block';
+    document.getElementById('button').style.display = 'none';
+    document.getElementById('background').style.display = 'none';
+}
+</script>
+<div  id="background"><img src="game-background.png">
+   <button id="button" onclick="myFunction()">
+    <img class="play" src= "play-clear.png"></button> 
+</div>    
+    <script id="game" type="text/javascript" src="script.js"></script>
 
 
 
-    <button onclick="moveup()">UP</button>
+
+    <!-- <button onclick="moveup()">UP</button>
     <button onclick="movedown()">DOWN</button>
     <button onclick="moveleft()">LEFT</button>
-    <button onclick="moveright()">RIGHT</button>
+    <button onclick="moveright()">RIGHT</button> -->
 
 
 </body>

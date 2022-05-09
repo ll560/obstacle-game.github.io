@@ -4,9 +4,9 @@ console.log("game")
 const phaserConfig = {
     type: Phaser.AUTO,
     parent: "game",
-    width: 1280,
+    width: 1200,
     height: 720,
-    backgroundColor: "#5DACD8",
+    backgroundColor: "#209e30",
     physics: {
       default: 'arcade',
       arcade: {
@@ -23,8 +23,6 @@ const phaserConfig = {
     gameOver: false
 };
 
-
-//background images
 const game = new Phaser.Game(phaserConfig);
 
 //global variables
@@ -40,35 +38,44 @@ function initScene() { }
 
 function preloadScene() {
     //place images in order back to front
+    this.load.image('background','game-background.png')
     this.load.image("clouds-white", "clouds-white.png");
     this.load.image('platform','floating-platform.png')
-    this.load.image('bombs', 'mine.png')
-    //this.load.image("clouds-white-small", "clouds-white-small.png");
+    this.load.image('bomb', 'mine.png')
+    this.load.image("clouds-white-small", "clouds-white-small.png");
     this.load.image('diamond', 'diamond.png');
-    //this.load.image('diamonds', 'red-blood-cell.png')
+    this.load.image('cell', 'red-blood-cell.png')
          //this.load.spritesheet('explosion', 'assets/explosion.png', { frameWidth: 64, frameHeight: 64, endFrame: 23 });
          //this.load.spritesheet('balls', 'assets/blue_ball.png', { frameWidth: 17, frameHeight: 17 });
     this.load.spritesheet('dude','dude.png', {frameWidth:32, frameHeight: 48});
  }
 
  function createScene() {
-   
+   this.add.image(400, 300, 'background')
+    // let bg = this.add.image(0, 0, 'cell')
+    // let container = this.add.container(400, 300, [ bg ]);
+    // bg.setInteractive();
+
+    //     bg.once('pointerup', function () {
+
+    //         this.scene.start('game');
+
+
     cloudsWhite = this.add.tileSprite(640, 200, 1280, 400, "clouds-white");//background
     
     //this is for platorm
     platform = this.physics.add.staticGroup();
     platform.enableBody = true;
-    platform.create(350, 750, 'platform').setScale(.9).refreshBody();//bottom platform
-
-    platform.create(890, 590, 'platform').setScale(.9);//ledge
-    platform.create(70, 550, 'platform');
+    platform.create(340, 720, 'platform').setScale(.9).refreshBody();//bottom platform
+    platform.create(900, 550, 'platform').setScale(.9);//ledge
+    platform.create(70, 450, 'platform');
   
     
       
+
     //this is for our player
     player = this.physics.add.sprite(100, 450, 'dude');
     //player.body.velocity.setTo(200,200);
-    
     player.body.bounce.set(.2);
     player.body.collideWorldBounds = true;
     //player.setScale(0.9, 0.9);
@@ -99,71 +106,73 @@ function preloadScene() {
   
   cursors = this.input.keyboard.createCursorKeys();
     
+
+
+  //this is for bombs -group
+  // bomb is the name of item individual
+    
+    
+    bombs = this.physics.add.group(
+    
+    );
+    this.physics.add.collider(bombs, platform);
+    this.physics.add.collider(player, bombs, hitBomb, null, this);
+ 
+    bombs.children.iterate(function (child) {
+      child.setBounceY(1);//change this to 1
+    });
+
+    function hitBomb (player, bomb) {
+      this.physics.pause();
+       player.setTint(0xff0000);
+       player.anims.play('turn');
+       gameOver = true;
+   }
   
 
     //this for the diamonds
     diamonds = this.physics.add.group({
       key: 'diamond',
-      repeat: 11, //number of diamonds
+      repeat: 8, //number of diamonds
       setXY:{x: 25, 
             y:0,  
-            stepX: 85}
+            stepX: 125}
     });
 
     diamonds.children.iterate(function (child) {
       child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
     });
-
     //check for collision on platform
     this.physics.add.collider(diamonds, platform);
     this.physics.add.overlap(player, diamonds, collectStar, null, this);
    
     
     
-   //this is for bombs
-    bombs = this.physics.add.group({
-        key: 'bombs',
-        repeat: 3,
-        setXY:{
-          x:25,
-          y:0,
-          stepX: 25
-        }
-    });
-    this.physics.add.collider(bombs, platform);
-    this.physics.add.collider(player, bombs, hitBomb, null, this);
- 
-    function hitBomb (player, bombs){
-      bombs.physics.pause();
-      player.setTint(0xff0000);
-      player.anims.play('turn');
-      gameOver = true;
-
-    }
+   
 
 
     scoreText =this.add.text(15, 15, 'score: 0', {fontFamily: 'Arial', fontSize: 64, color: '#000' });
      // this.input.once(collectStar){
-    function collectStar (player, diamonds) {
-        diamonds.disableBody(true, true);
+
+    function collectStar (player, diamond) {
+        diamond.disableBody(true, true);
 
         score += 10;
         scoreText.setText('Score:' + score)
 
-      //  if(this.bombs.countActive() === 0) //changed
-      //  {
-      //    this.diamonds.children.interate(function(child){
-      //      child.enableBody(true, child.x, 0, true, true);
-      //    });
+       if(diamonds.countActive(true) === 0) { //if the count of active stars = 0
+         diamonds.children.iterate(function(child) {
+           child.enableBody(true, child.x, 0, true, true);//reactivates the star
+         });
 
-      //    let x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-      //       //this.group
-      //    let bomb = bombs.group.create(x, 16, 'bombs');
-      //    bomb.setBounce(1);
-      //    bomb.setCollideWorldBounds(true);
-      //    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+        let x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+            //this.group
+         let bomb1 = bombs.create(x, 16, 'bomb');
+         bomb1.setBounce(1);
+         bomb1.setCollideWorldBounds(true);
+         bomb1.setVelocity(Phaser.Math.Between(-200, 200), 20);
 
-      // } 
+      } 
       
  }
 
@@ -193,7 +202,7 @@ function preloadScene() {
 
 
  function updateScene() {
-    //cloudsWhite.tilePositionX += 0.5;
+    cloudsWhite.tilePositionX += 0.5;
     //cloudsWhiteSmall.tilePositionX += 0.25;
 
 if (cursors.left.isDown)
@@ -216,10 +225,10 @@ if (cursors.up.isDown && player.body.touching.down)
 {
     player.setVelocityY(-330);
 }
-//if (score === 120){
-  //  alert("You Win!")
-    //score = 0
-  //}
+if (score === 620){
+   alert("You Win!")
+   score = 0
+  }
 }
 
 
