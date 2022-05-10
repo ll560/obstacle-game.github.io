@@ -32,7 +32,7 @@ let cursors;
 let diamonds, bombs;
 
 let score = 0;
-
+let resetText;
 
 function initScene() { }
 
@@ -124,9 +124,11 @@ function preloadScene() {
 
     function hitBomb (player, bomb) {
       this.physics.pause();
-       player.setTint(0xff0000);
+       player.setTint(0xff1000);
        player.anims.play('turn');
        gameOver = true;
+
+
    }
   
 
@@ -146,10 +148,11 @@ function preloadScene() {
     this.physics.add.collider(diamonds, platform);
     this.physics.add.overlap(player, diamonds, collectStar, null, this);
    
-    
-    
-   
-
+    resetText =this.add.text(1000, 680, 'reset game', {fontFamily: 'Arial', fontSize: 30, color: '#000' })
+    // resetText.addEventListener('click', eventFunction);
+    // function eventFunction(){
+    //   console.log('new page')
+    // }
 
     scoreText =this.add.text(15, 15, 'score: 0', {fontFamily: 'Arial', fontSize: 64, color: '#000' });
      // this.input.once(collectStar){
@@ -225,10 +228,14 @@ if (cursors.up.isDown && player.body.touching.down)
 {
     player.setVelocityY(-330);
 }
-if (score === 620){
+if (score === 20){
    alert("You Win!")
    score = 0
+   setTimeout(window.location.href = "index.html", 6000); //setTimeout to slow it down
   }
+
+
+
 }
 
 
@@ -309,3 +316,4 @@ if (score === 620){
 
 
 //=================items wrilling around
+const PORT = process.env.PORT || 3000;
