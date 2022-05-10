@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Game</title>
     <script src="phaser.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="style.css">
     <script src="//cdn.jsdelivr.net/npm/phaser@3.24.1/dist/phaser.min.js"></script>
@@ -21,6 +21,16 @@
     <img class="play" src= "play-clear.png"></button> 
 </div>    
     <script id="game" type="text/javascript" src="script.js"></script>
+
+
+<button id="button"onclick="myFunction2()">reset</button>
+<script> function myFunction2(){
+    document.getElementById('game').style.display = 'none';
+    document.getElementById('button').style.display = 'block';
+    document.getElementById('background').style.display = 'block';
+}
+</script>
+
 
 
 
