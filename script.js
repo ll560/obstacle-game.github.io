@@ -154,7 +154,7 @@ function preloadScene() {
     //   console.log('new page')
     // }
 
-    scoreText =this.add.text(15, 15, 'score: 0', {fontFamily: 'Arial', fontSize: 64, color: '#000' });
+    scoreText =this.add.text(15, 15, 'score: 0', {fontFamily: 'Arial', fontSize: 64, color: '#000000' });
      // this.input.once(collectStar){
 
     function collectStar (player, diamond) {
@@ -228,7 +228,7 @@ if (cursors.up.isDown && player.body.touching.down)
 {
     player.setVelocityY(-330);
 }
-if (score === 120){
+if (score === 820){
     
    alert("You Win!")
    score = 0
@@ -280,41 +280,25 @@ if (score === 120){
 
 
 //------------working sprite
-// var config = {
-//     type: Phaser.AUTO,
-//     width: 800,
-//     height: 600,
-//     parent: 'phaser-example',
-//     scene: {
-//         preload: preload,
-//         create: create
-//     }
-// };
-
-// var game = new Phaser.Game(config);
-
-// function preload ()
-// {
-//     this.load.spritesheet('explosion', 'assets/guy.png', { frameWidth: 64, frameHeight: 64, endFrame: 23 });
-//     this.load.spritesheet('balls', 'assets/guy.png', { frameWidth: 17, frameHeight: 17 });
-// }
-
-// function create ()
-// {
-//     var config = {
-//         key: 'explodeAnimation',
-//         frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 23, first: 23 }),
-//         frameRate: 20,
-//         repeat: -1
-//     };
-
-//     this.anims.create(config);
-
-//     this.add.sprite(400, 300, 'explosion').play('explodeAnimation');
-
-//     this.add.sprite(400, 300, 'balls', 3);
-// }
 
 
-//=================items wrilling around
+
+//=================port for heroku
 //const PORT = process.env.PORT || 3000;
+
+const fb = [];
+// ADD CODE HERE
+for ( let i = 1; i< 17; i++){
+  if(i % 3 == 0 && i & 5 == 0){
+    fb.push('fizzbuzz');
+  } else if (i % 3 == 0){
+    fb.push('fizz')
+  } else if (i % 5 == 0){
+    fb.push('buzz')
+  }else{
+    fb.push(i)
+  }
+ 
+}
+
+console.log(fb)
